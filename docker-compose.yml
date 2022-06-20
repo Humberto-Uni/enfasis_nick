@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  smslaravel:
+    image: smslaravel
+    build:
+      context: .
+      dockerfile: ./Dockerfile
