@@ -5,3 +5,11 @@ php:
   - '7.0'
   - hhvm # on Trusty only
   - nightly
+
+
+  before_script: composer require atoum/atoum
+script: vendor/bin/atoum
+
+  install: php vendor/vendors.php
+
+before_script: phpenv config-add myconfig.ini
