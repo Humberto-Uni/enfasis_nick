@@ -1,8 +1,6 @@
 language: php
 
-cache:
-  directories:
-    - $HOME/.composer/cache
+dist: bionic
 
 matrix:
   include:
@@ -70,10 +68,20 @@ matrix:
     - php: 7.4
       env: LARAVEL=8.* PHPUNIT=^9.0 TESTBENCH=6.*
 
-before_install:
+      services:
+      - mysql
+
+before_script:
+  - cp .env.example .env
+  - mysql -e "create database laravel"
+  - composer self-update
+  - composer install --no--interaction --prefer-source
+  - php artisan key:generate
+  - php artisan migrate
   - travis_retry composer self-update
   - travis_retry composer require "illuminate/contracts:${LARAVEL}" "phpunit/phpunit:${PHPUNIT}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
 
 install: COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction --no-suggest
 
-script: vendor/bin/phpunit
+script: 
+- vendor/bin/phpunit
